@@ -49,6 +49,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
     def log_error(self, format_, *args):
         # suppress "Request timed out: timeout('timed out',)"
         if isinstance(args[0], socket.timeout):
+            self.log_message('Request timed out for %s', self.path)
             return
         self.log_message('Failed to send request to path: %s', self.path)
         self.log_message('Other Info: ' + format_, *args)
