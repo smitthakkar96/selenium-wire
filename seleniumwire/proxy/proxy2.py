@@ -8,6 +8,7 @@
 #
 
 import base64
+import traceback
 import re
 import socket
 import ssl
@@ -116,6 +117,8 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         except Exception:
             if origin in self.tls.conns:
                 del self.tls.conns[origin]
+            print('FROM SMIT: Something happened for path ', self.path)
+            traceback.print_exc()
             self.send_error(502)
             return
         finally:
