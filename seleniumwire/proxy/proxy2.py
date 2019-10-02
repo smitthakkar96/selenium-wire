@@ -118,6 +118,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
             if origin in self.tls.conns:
                 del self.tls.conns[origin]
             print('FROM SMIT: Something happened for path ', self.path)
+            self.log_message('FROM SMIT: Something happened for path %s', self.path)
             traceback.print_exc()
             self.send_error(502)
             return
