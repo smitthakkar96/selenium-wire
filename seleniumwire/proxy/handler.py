@@ -229,6 +229,7 @@ class CaptureRequestHandler(AdminMixin, ProxyRequestHandler):
 
     def log_error(self, format_, *args):
         # suppress "Request timed out: timeout('timed out',)"
+        log.error("FROM DHRUV: %s %s", locals(), self.path)
         if isinstance(args[0], socket.timeout):
             return
         # Send server error messages through our own logging config.
