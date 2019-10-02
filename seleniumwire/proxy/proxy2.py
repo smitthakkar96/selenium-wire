@@ -98,6 +98,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         u = urllib.parse.urlsplit(req.path)
         import uuid
         queryparam = '?dev=dhruv-' + str(uuid.uuid4())
+        self.log_message("FROM SMIT: UUID = %s", queryparam)
         scheme, netloc, path = u.scheme, u.netloc, (u.path + queryparam + '&' + u.query if u.query else u.path + queryparam)
         assert scheme in ('http', 'https')
         if netloc:
