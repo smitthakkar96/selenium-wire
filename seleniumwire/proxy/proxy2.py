@@ -50,8 +50,8 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         # suppress "Request timed out: timeout('timed out',)"
         if isinstance(args[0], socket.timeout):
             return
-
-        self.log_message(format_, *args)
+        self.log_message('Failed to send request to path: %s', self.path)
+        self.log_message('Other Info: ' + format_, *args)
 
     def do_CONNECT(self):
         self.send_response(200, 'Connection Established')
