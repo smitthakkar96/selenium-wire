@@ -98,7 +98,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         u = urllib.parse.urlsplit(req.path)
         import uuid
         queryparam = '?dev=dhruv-' + str(uuid.uuid4())
-        self.log_message("FROM SMIT: UUID = %s", queryparam)
+        self.log_message("UUID = %s", queryparam)
         scheme, netloc, path = u.scheme, u.netloc, (u.path + queryparam + '&' + u.query if u.query else u.path + queryparam)
         assert scheme in ('http', 'https')
         if netloc:
@@ -123,7 +123,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
             print('FROM SMIT: Something happened for path ', self.path)
             self.log_message('FROM SMIT: Something happened for path %s', self.path)
             self.log_message('FROM SMIT: Something happened %s', locals())
-            self.log_message('FROM SMIT: Something happened %s', res.__dict__())
+            # self.log_message('FROM SMIT: Something happened %s', locals().get('res', None))
             traceback.print_exc()
             self.send_error(502)
             return
