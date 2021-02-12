@@ -5,7 +5,7 @@ import signal
 
 from seleniumwire.proxy import client, util
 
-logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+logging.basicConfig(level=logging.DEBUG)
 
 
 def standalone_proxy(port):

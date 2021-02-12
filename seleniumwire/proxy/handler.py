@@ -166,6 +166,7 @@ class CaptureRequestHandler(AdminMixin, ProxyRequestHandler):
             # Suppress connectivity related tracebacks to prevent these normally
             # harmless exceptions from alarming users. These exceptions can often
             # occur during server shutdown.
+            log.info('FROM SMIT %s %s', locals(), self.__dict__)
             if self.server.options.get('suppress_connection_errors', True):
                 log.debug(str(e))
             else:
@@ -228,6 +229,7 @@ class CaptureRequestHandler(AdminMixin, ProxyRequestHandler):
 
     def log_error(self, format_, *args):
         # suppress "Request timed out: timeout('timed out',)"
+        log.error("FROM DHRUV: %s %s", locals(), getattr(self, 'path', None))
         if isinstance(args[0], socket.timeout):
             return
         # Send server error messages through our own logging config.

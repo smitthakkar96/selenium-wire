@@ -8,6 +8,7 @@
 #
 
 import base64
+import traceback
 import re
 import socket
 import ssl
@@ -49,9 +50,10 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
     def log_error(self, format_, *args):
         # suppress "Request timed out: timeout('timed out',)"
         if isinstance(args[0], socket.timeout):
+            self.log_message('Request timed out for %s', self.path)
             return
-
-        self.log_message(format_, *args)
+        self.log_message('Failed to send request to path: %s', self.path)
+        self.log_message('Other Info: ' + format_, *args)
 
     def do_CONNECT(self):
         self.send_response(200, 'Connection Established')
@@ -94,7 +96,10 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
             req.headers['Content-length'] = str(len(req_body))
 
         u = urllib.parse.urlsplit(req.path)
-        scheme, netloc, path = u.scheme, u.netloc, (u.path + '?' + u.query if u.query else u.path)
+        import uuid
+        queryparam = '?dev=dhruv-' + str(uuid.uuid4())
+        self.log_message("UUID = %s", queryparam)
+        scheme, netloc, path = u.scheme, u.netloc, (u.path + queryparam + '&' + u.query if u.query else u.path + queryparam)
         assert scheme in ('http', 'https')
         if netloc:
             req.headers['Host'] = netloc
@@ -115,6 +120,11 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         except Exception:
             if origin in self.tls.conns:
                 del self.tls.conns[origin]
+            print('FROM SMIT: Something happened for path ', self.path)
+            self.log_message('FROM SMIT: Something happened for path %s', self.path)
+            self.log_message('FROM SMIT: Something happened %s', locals())
+            # self.log_message('FROM SMIT: Something happened %s', locals().get('res', None))
+            traceback.print_exc()
             self.send_error(502)
             return
         finally:
